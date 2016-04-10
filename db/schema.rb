@@ -11,12 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160407100943) do
+ActiveRecord::Schema.define(version: 20160410150027) do
+
+  create_table "friendships", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "friend_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "stocks", force: :cascade do |t|
     t.string   "code"
     t.string   "name"
     t.decimal  "last_price"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "user_stocks", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "stock_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -41,6 +55,9 @@ ActiveRecord::Schema.define(version: 20160407100943) do
     t.datetime "locked_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "occupation"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
