@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  code: MyString
+  name: MyString
+  capital: 9.99
+  cash: 9.99
+  start_date: 2016-04-28
+  end_date: 2016-04-28
+  user_id: 
+
+two:
+  code: MyString
+  name: MyString
+  capital: 9.99
+  cash: 9.99
+  start_date: 2016-04-28
+  end_date: 2016-04-28
+  user_id: 

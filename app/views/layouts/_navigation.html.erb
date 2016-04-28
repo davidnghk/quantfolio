@@ -9,9 +9,11 @@
         </button>
         <div class="navbar-collapse collapse navbar-responsive-collapse">
           <ul class="nav navbar-nav col-mdp6">
-            <li><%= link_to "My Portfolio", my_portfolio_path %></li>
+            <li><%= link_to "Portfolio", portfolios_path %></li>
+            <li><%= link_to "My Portfolios", my_funds_path %></li>
             <li><%= link_to "My Profile", edit_registration_path(current_user) %></li>
             <li><%= link_to "My Friends", my_friends_path  %></li>
+            <li><%= link_to "Stocks", vehicles_path  %></li>
           </ul>
           <ul class="nav navbar-right col-md-4">
           	<li class="col-md-8 user-name text-right">
@@ -20,6 +22,20 @@
           	</li>
 			<li class="col-md-4 logout"><%= link_to("Logout", destroy_user_session_path,
 						class: 'btn btn-xs btn-danger', method: :delete) %></li>
+          </ul>
+        </div>
+    <% else %>
+        <div class="navbar-collapse collapse navbar-responsive-collapse">
+          <ul class="nav navbar-nav col-mdp6">
+            <li><%= link_to "Stocks", vehicles_path  %></li>
+          </ul>
+          <ul class="nav navbar-right col-md-4">
+			<li class="col-md-8 text-right">
+          		<%= link_to "Login", new_user_session_path %>
+          	</li>
+          	<li>
+          		<%= link_to "Sign Up", new_user_registration_path %>
+          	</li>
           </ul>
         </div>
     <% end %>

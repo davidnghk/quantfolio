@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :portfolios
+  resources :vehicles
   devise_for :users, :controllers => { :registrations => "user/registrations"}
   resources :user_stocks, except: [:show, :edit, :update]
   resources :users, only: [:show]
@@ -13,6 +15,7 @@ Rails.application.routes.draw do
   get 'search_stocks', to: "stocks#search"
   get 'my_friends', to: 'users#my_friends'
   get 'search_friends', to: 'users#search'
+  get 'my_funds', to: 'portfolios#my_funds'
   post 'add_friend', to: 'users#add_friend'
   
   # get 'index', to: 'index_path'

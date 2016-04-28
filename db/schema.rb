@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160410150027) do
+ActiveRecord::Schema.define(version: 20160428123021) do
 
   create_table "friendships", force: :cascade do |t|
     t.integer  "user_id"
@@ -19,6 +19,20 @@ ActiveRecord::Schema.define(version: 20160410150027) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "portfolios", force: :cascade do |t|
+    t.string   "code"
+    t.string   "name"
+    t.decimal  "capital"
+    t.decimal  "cash"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "portfolios", ["user_id"], name: "index_portfolios_on_user_id"
 
   create_table "stocks", force: :cascade do |t|
     t.string   "code"
@@ -62,5 +76,14 @@ ActiveRecord::Schema.define(version: 20160410150027) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+
+  create_table "vehicles", force: :cascade do |t|
+    t.string   "ticker"
+    t.string   "name"
+    t.string   "currency"
+    t.decimal  "last_price"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
 end
