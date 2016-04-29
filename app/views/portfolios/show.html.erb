@@ -1,39 +1,8 @@
-<p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Code:</strong>
-  <%= @portfolio.code %>
-</p>
-
-<p>
-  <strong>Name:</strong>
-  <%= @portfolio.name %>
-</p>
-
-<p>
-  <strong>Capital:</strong>
-  <%= @portfolio.capital %>
-</p>
-
-<p>
-  <strong>Cash:</strong>
-  <%= @portfolio.cash %>
-</p>
-
-<p>
-  <strong>Start date:</strong>
-  <%= @portfolio.start_date %>
-</p>
-
-<p>
-  <strong>End date:</strong>
-  <%= @portfolio.end_date %>
-</p>
-
-<p>
-  <strong>User:</strong>
-  <%= @portfolio.user %>
-</p>
+<%= render 'master' %>
 
 <%= link_to 'Edit', edit_portfolio_path(@portfolio) %> |
 <%= link_to 'Back', portfolios_path %>
+
+<%= render 'holdings' %>
+

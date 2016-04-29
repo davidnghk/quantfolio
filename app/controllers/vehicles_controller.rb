@@ -1,6 +1,20 @@
 class VehiclesController < ApplicationController
   before_action :set_vehicle, only: [:show, :edit, :update, :destroy]
 
+  def search
+    if params[:vehicle]
+      @vehicle = Vehicle.find_by_ticker(params[:vehicle])
+      @vehicle ||= Vehicle.new_from_lookup(params[:vehicle])
+    end
+
+    if @vehicle
+      # render json: @vehicle
+      render partial: 'lookup'
+    else
+      render status: :not_found, nothing: true
+    end
+  end
+
   # GET /vehicles
   # GET /vehicles.json
   def index

@@ -1,10 +1,12 @@
 class PortfoliosController < ApplicationController
   before_action :set_portfolio, only: [:show, :edit, :update, :destroy]
-
+  before_action :require_same_user, only: [:edit, :update, :destroy]
+  
   # GET /portfolios
   # GET /portfolios.json
   def index
     @portfolios = Portfolio.all
+    # @portfolios = current_user.portfolios
   end
 
  # GET /portfolios
@@ -77,5 +79,12 @@ class PortfoliosController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def portfolio_params
       params.require(:portfolio).permit(:code, :name, :capital, :cash, :start_date, :end_date, :user_id)
+    end
+    
+    def require_same_user
+      if current_user != @portfolio.user and !current_user.admin?
+        flash[:danger] = "You can only edit or delete your own articles"
+        redirect_to root_path
+      end
     end
 end

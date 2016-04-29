@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  portfolio_id: 
+  vehicle_id: 
+  units: 1
+  unit_cost: 9.99
+  target_price: 9.99
+  target_weighting: 9.99
+
+two:
+  portfolio_id: 
+  vehicle_id: 
+  units: 1
+  unit_cost: 9.99
+  target_price: 9.99
+  target_weighting: 9.99

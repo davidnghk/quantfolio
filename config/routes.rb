@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :holdings
+  resources :holdings
   resources :portfolios
   resources :vehicles
   devise_for :users, :controllers => { :registrations => "user/registrations"}
@@ -11,8 +13,9 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
-  get 'my_portfolio', to: "users#my_portfolio"
+  get 'my_portfolio', to: "portfolios#my_portfolio"
   get 'search_stocks', to: "stocks#search"
+  get 'search_vehicles', to: "vehicles#search"
   get 'my_friends', to: 'users#my_friends'
   get 'search_friends', to: 'users#search'
   get 'my_funds', to: 'portfolios#my_funds'

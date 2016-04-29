@@ -9,7 +9,7 @@
         </button>
         <div class="navbar-collapse collapse navbar-responsive-collapse">
           <ul class="nav navbar-nav col-mdp6">
-            <li><%= link_to "Portfolio", portfolios_path %></li>
+            <li><%= link_to "Portfolios", portfolios_path %></li>
             <li><%= link_to "My Portfolios", my_funds_path %></li>
             <li><%= link_to "My Profile", edit_registration_path(current_user) %></li>
             <li><%= link_to "My Friends", my_friends_path  %></li>
@@ -20,8 +20,9 @@
           		<i class="fa fa-user"></i>
           	<%= current_user.full_name.present? ? current_user.full_name : current_user.email %>
           	</li>
-			<li class="col-md-4 logout"><%= link_to("Logout", destroy_user_session_path,
-						class: 'btn btn-xs btn-danger', method: :delete) %></li>
+			<li class="col-md-4 logout">
+			<%= link_to("Logout", destroy_user_session_path, class: 'btn btn-xs btn-danger', method: :delete) %>
+			</li>
           </ul>
         </div>
     <% else %>

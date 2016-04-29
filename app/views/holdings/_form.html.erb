@@ -1,0 +1,41 @@
+<%= form_for(@holding) do |f| %>
+  <% if @holding.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@holding.errors.count, "error") %> prohibited this holding from being saved:</h2>
+
+      <ul>
+      <% @holding.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :portfolio_id %><br>
+    <%= f.text_field :portfolio_id %>
+  </div>
+  <div class="field">
+    <%= f.label :vehicle_id %><br>
+    <%= f.text_field :vehicle_id %>
+  </div>
+  <div class="field">
+    <%= f.label :units %><br>
+    <%= f.number_field :units %>
+  </div>
+  <div class="field">
+    <%= f.label :unit_cost %><br>
+    <%= f.text_field :unit_cost %>
+  </div>
+  <div class="field">
+    <%= f.label :target_price %><br>
+    <%= f.text_field :target_price %>
+  </div>
+  <div class="field">
+    <%= f.label :target_weighting %><br>
+    <%= f.text_field :target_weighting %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

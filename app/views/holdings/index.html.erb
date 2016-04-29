@@ -1,0 +1,37 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Holdings</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Portfolio</th>
+      <th>Vehicle</th>
+      <th>Units</th>
+      <th>Unit cost</th>
+      <th>Target price</th>
+      <th>Target weighting</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @holdings.each do |holding| %>
+      <tr>
+        <td><%= holding.portfolio %></td>
+        <td><%= holding.vehicle %></td>
+        <td><%= holding.units %></td>
+        <td><%= holding.unit_cost %></td>
+        <td><%= holding.target_price %></td>
+        <td><%= holding.target_weighting %></td>
+        <td><%= link_to 'Show', holding %></td>
+        <td><%= link_to 'Edit', edit_holding_path(holding) %></td>
+        <td><%= link_to 'Destroy', holding, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Holding', new_holding_path %>

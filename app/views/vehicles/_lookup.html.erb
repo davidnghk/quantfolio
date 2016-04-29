@@ -1,0 +1,39 @@
+<div id="vehicle-lookup">
+	<h3>Search form vehicles</h3>
+	<%= form_tag search_vehicles_path, remote:true, method: :get, id: 'vehicle-lookup-form' do %>
+	<div class="form-group row no padding text-center col-md-12">
+		<div class="col-md-10">
+			<%= text_field_tag :vehicle, params[:vehicle], placeholder: "vehicle code symbol", 
+			autofocus: true, class: 'form-control search-box input-lg' %>
+		</div>
+		<div class="col-md-2">
+			<%= button_tag(type: :submit, class: "btn btn-lg btn-success") do %>
+				<i class="fa fa-search"></i> Look up a vehicle
+			<% end %>
+		</div>
+	</div>
+	<% end %>
+
+	<% if @vehicle%>
+		<div id="vehicle-lookup-results" class="well results-block">
+			<strong>Symbol:</strong> <%= @vehicle.ticker %>
+			<strong>Name:</strong> <%= @vehicle.name %>
+			<strong>Price:</strong> <%= @vehicle.last_price %>
+			<% if @portfolio.can_add_vehicle?(@vehicle.ticker) %>
+				<%= link_to "Add to my vehicles", user_vehicles_path(user: current_user, vehicle_code: @vehicle.code,
+					vehicle_id: @vehicle.id ? @vehicle.id : ''), class: 'btn btn-xs btn-success', method: :post %>
+			<% else %>
+				<span class="label label-default">
+					vehicle already added
+				<% if !current_user.under_vehicle_limit? %>
+					10 vehicles
+				<% end %>
+				<% if current_user.vehicle_already_added?(@vehicle.ticker) %>
+					this vehicle
+				<% end %>
+				</span>
+			<% end %>
+		</div>
+	<% end %>
+	<div id="vehicle-lookup-errors"></div>
+</div>
