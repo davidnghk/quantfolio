@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Vehicle:</strong>
+  <%= @vehicle_price.vehicle %>
+</p>
+
+<p>
+  <strong>Trade date:</strong>
+  <%= @vehicle_price.trade_date %>
+</p>
+
+<p>
+  <strong>Open:</strong>
+  <%= @vehicle_price.open %>
+</p>
+
+<p>
+  <strong>Volume:</strong>
+  <%= @vehicle_price.volume %>
+</p>
+
+<p>
+  <strong>High:</strong>
+  <%= @vehicle_price.high %>
+</p>
+
+<p>
+  <strong>Low:</strong>
+  <%= @vehicle_price.low %>
+</p>
+
+<p>
+  <strong>Close:</strong>
+  <%= @vehicle_price.close %>
+</p>
+
+<p>
+  <strong>Adj close:</strong>
+  <%= @vehicle_price.adj_close %>
+</p>
+
+<%= link_to 'Edit', edit_vehicle_price_path(@vehicle_price) %> |
+<%= link_to 'Back', vehicle_prices_path %>

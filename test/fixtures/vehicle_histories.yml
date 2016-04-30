@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  vehicle_id: 
+  trade_date: 2016-04-30
+  open: 9.99
+  volume: 9.99
+  high: 9.99
+  low: 9.99
+  close: 9.99
+  adj_close: 9.99
+
+two:
+  vehicle_id: 
+  trade_date: 2016-04-30
+  open: 9.99
+  volume: 9.99
+  high: 9.99
+  low: 9.99
+  close: 9.99
+  adj_close: 9.99

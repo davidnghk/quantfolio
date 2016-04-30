@@ -1,6 +1,7 @@
 class VehiclesController < ApplicationController
   before_action :set_vehicle, only: [:show, :edit, :update, :destroy]
 
+  
   def search
     if params[:vehicle]
       @vehicle = Vehicle.find_by_ticker(params[:vehicle])
@@ -88,5 +89,12 @@ class VehiclesController < ApplicationController
     def vehicle_params
       # params.require(:vehicle).permit(:ticker, :name, :currency, :last_price)
       params.require(:vehicle).permit(:ticker)
+    end
+    
+    def require_same_user
+      if current_user != @portfolio.user 
+        flash[:danger] = "You can only edit or delete your own articles"
+        redirect_to root_path
+      end
     end
 end

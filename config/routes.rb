@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :vehicle_prices
   resources :holdings
   resources :holdings
   resources :portfolios

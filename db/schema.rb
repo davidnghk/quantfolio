@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160429160039) do
+ActiveRecord::Schema.define(version: 20160430172048) do
 
   create_table "friendships", force: :cascade do |t|
     t.integer  "user_id"
@@ -92,13 +92,51 @@ ActiveRecord::Schema.define(version: 20160429160039) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 
+  create_table "vehicle_histories", force: :cascade do |t|
+    t.integer  "vehicle_id"
+    t.date     "trade_date"
+    t.decimal  "open"
+    t.decimal  "volume"
+    t.decimal  "high"
+    t.decimal  "low"
+    t.decimal  "close"
+    t.decimal  "adj_close"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "vehicle_histories", ["vehicle_id"], name: "index_vehicle_histories_on_vehicle_id"
+
+  create_table "vehicle_prices", force: :cascade do |t|
+    t.integer  "vehicle_id"
+    t.date     "trade_date"
+    t.decimal  "open"
+    t.decimal  "volume"
+    t.decimal  "high"
+    t.decimal  "low"
+    t.decimal  "close"
+    t.decimal  "adj_close"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.decimal  "return"
+  end
+
+  add_index "vehicle_prices", ["vehicle_id"], name: "index_vehicle_prices_on_vehicle_id"
+
   create_table "vehicles", force: :cascade do |t|
     t.string   "ticker"
     t.string   "name"
     t.string   "currency"
     t.decimal  "last_price"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.decimal  "return"
+    t.decimal  "risk"
+    t.decimal  "sharpe_ratio"
+    t.decimal  "beta"
+    t.decimal  "alpha"
+    t.integer  "no_of_prices"
+    t.integer  "parent_id"
   end
 
 end

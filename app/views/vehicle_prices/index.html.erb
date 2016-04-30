@@ -1,0 +1,42 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Vehicle Prices</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Trade date</th>
+      <th>Open</th>
+      <th>Volume</th>
+      <th>High</th>
+      <th>Low</th>
+      <th>Close</th>
+      <th>Adj close</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @vehicle_prices.each do |vehicle_price| %>
+      <tr>
+        <td><%= vehicle_price.id %></td>
+        <td><%= vehicle_price.trade_date %></td>
+        <td><%= vehicle_price.open %></td>
+        <td><%= vehicle_price.volume %></td>
+        <td><%= vehicle_price.high %></td>
+        <td><%= vehicle_price.low %></td>
+        <td><%= vehicle_price.close %></td>
+        <td><%= vehicle_price.adj_close %></td>
+                <td><%= vehicle_price.return %></td>
+        <td><%= link_to 'Show', vehicle_price %></td>
+        <td><%= link_to 'Edit', edit_vehicle_price_path(vehicle_price) %></td>
+        <td><%= link_to 'Destroy', vehicle_price, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Vehicle price', new_vehicle_price_path %>
