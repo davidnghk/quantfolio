@@ -2,7 +2,7 @@ class VehiclesController < ApplicationController
   before_action :set_vehicle, only: [:show, :edit, :update, :destroy]
 
   def chart
-      @vehicle = Vehicle.where(" return is not null").paginate(:page => params[:page]).order('return desc')
+      @vehicle = Vehicle.where(" return is not null").order("sharpe_ratio DESC").paginate(:page => params[:page])
   end
   
   def search
