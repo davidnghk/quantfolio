@@ -1,6 +1,9 @@
 class VehiclesController < ApplicationController
   before_action :set_vehicle, only: [:show, :edit, :update, :destroy]
 
+  def chart
+      @vehicle = Vehicle.where(" return is not null").paginate(:page => params[:page]).order('return desc')
+  end
   
   def search
     if params[:vehicle]

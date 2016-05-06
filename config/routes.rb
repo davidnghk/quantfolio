@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   get 'search_friends', to: 'users#search'
   get 'my_funds', to: 'portfolios#my_funds'
   post 'add_friend', to: 'users#add_friend'
+  get 'stock_chart', to: "vehicles#chart"
   
   # get 'index', to: 'index_path'
   

@@ -1,4 +1,7 @@
 class Vehicle < ActiveRecord::Base
+  belongs_to :parent, :class_name => "Vehicle", :foreign_key => :parent_id
+  has_many :children, :class_name => "Vehicle"
+  
   has_many :holdings
   has_many :vehicle_histories
   has_many :vehicle_prices
@@ -35,7 +38,7 @@ class Vehicle < ActiveRecord::Base
     v=Vehicle.find_by_ticker(ticker_symbol)
     VehiclePrice.where(:vehicle_id => v.id).delete_all
     begin
-      history = StockQuote::Stock.history(v.ticker, Date.today-3.years, Date.today)
+      history = StockQuote::Stock.history(v.ticker, Date.today-1.years, Date.today)
          
       history.each do |sqh|
       vh = VehiclePrice.new
@@ -62,15 +65,17 @@ class Vehicle < ActiveRecord::Base
       prev_adj_close = row.adj_close
       row.save
     end    
-    
+          
     vehicle_price = VehiclePrice.where(:vehicle_id => v.id).extend(DescriptiveStatistics)
-    v.return = vehicle_price.mean(&:return) * 260 
-    v.risk = vehicle_price.standard_deviation(&:return) * Math.sqrt(260) 
     v.no_of_prices = vehicle_price.number(&:return)
-    if v.risk > 0
-      v.sharpe_ratio = (v.return - 0.02)/v.risk
-    end 
-    v.save    
+    if v.no_of_prices > 0
+      v.return = vehicle_price.mean(&:return) * 260 
+      v.risk = vehicle_price.standard_deviation(&:return) * Math.sqrt(260) 
+      if v.risk > 0
+        v.sharpe_ratio = (v.return - 0.02)/v.risk
+      end 
+      v.save    
+    end
   end  
   
   def self.get_history
