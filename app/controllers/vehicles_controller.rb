@@ -1,10 +1,9 @@
 class VehiclesController < ApplicationController
   helper_method :sort_column, :sort_direction
-  
+  before_action :authenticate_user!, except: [:chart]
   before_action :set_vehicle, only: [:show, :edit, :update, :destroy]
 
   def chart
-    
     if params[:search]
       @vehicles = Vehicle.where("parent_id is NOT NULL").search(params[:search]).order(sort_column + " " + sort_direction).paginate(:page => params[:page])
     else
