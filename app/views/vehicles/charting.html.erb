@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Testing Vehicles</h1>
+	
+<div class-"row">
+	<div class="col-sm-6 form-group">
+	<% form_tag stock_chart_path, :method => 'get' do%>
+		<p>
+			<%= text_field_tag :wsearch, params[:wsearch] %>
+			<%= submit_tag "Wild Search", :name => nil %>
+		</p>
+	<% end %>
+	</div>
+</div>

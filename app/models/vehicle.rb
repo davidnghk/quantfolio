@@ -5,7 +5,11 @@ class Vehicle < ActiveRecord::Base
   has_many :holdings
   has_many :vehicle_histories
   has_many :vehicle_prices
-  
+     
+  def self.search(search)
+    where("return IS NOT NULL AND (ticker LIKE? OR name LIKE ?)", "#{search}%", "%#{search}%")
+  end   
+     
   def self.find_by_ticker(ticker_symbol)
     where(ticker: ticker_symbol).first
   end 
@@ -27,7 +31,7 @@ class Vehicle < ActiveRecord::Base
   
   def self.refresh_price 
     Vehicle.all.each do |v|
-      v.name        = StockQuote::Stock.quote(v.ticker).name
+      # v.name        = StockQuote::Stock.quote(v.ticker).name
       v.last_price  = StockQuote::Stock.quote(v.ticker).last_trade_price_only
       v.save
     end
@@ -39,52 +43,85 @@ class Vehicle < ActiveRecord::Base
     VehiclePrice.where(:vehicle_id => v.id).delete_all
     begin
       history = StockQuote::Stock.history(v.ticker, Date.today-1.years, Date.today)
-         
       history.each do |sqh|
-      vh = VehiclePrice.new
-      vh.vehicle_id = v.id
-      vh.trade_date = sqh.date
-      vh.volume = sqh.volume
-      vh.open = sqh.open
-      vh.high = sqh.high
-      vh.low  = sqh.low
-      vh.close = sqh.close
-      vh.adj_close = sqh.adj_close
-      vh.save
+        vh = VehiclePrice.new
+        vh.vehicle_id = v.id
+        vh.trade_date = sqh.date
+        vh.volume = sqh.volume
+        vh.open = sqh.open
+        vh.high = sqh.high
+        vh.low  = sqh.low
+        vh.close = sqh.close
+        vh.adj_close = sqh.adj_close
+        vh.save
       end
     rescue StandardError
       history = nil
     end
-         
-    vp = VehiclePrice.where(:vehicle_id => v.id).order(:trade_date) 
-    prev_adj_close = -1    
-    vp.each do |row|
+       
+end 
+
+def self.calc_stats(ticker_symbol)  
+    @v=Vehicle.find_by_ticker(ticker_symbol)
+    prev_adj_close = -1 
+    return_sum = 0.0
+    @v.vehicle_prices.sort_by { |m| m[:trade_date] }.each do |row|
       if prev_adj_close > 0 
-         row.return = (row.adj_close - prev_adj_close) / row.adj_close
+         row.return = (row.adj_close - prev_adj_close) / prev_adj_close
+         puts row.return
+         puts row.adj_close
+         puts prev_adj_close
+         return_sum = return_sum + Math.log(1+row.return)
+         puts row.return 
+         puts return_sum 
       end
       prev_adj_close = row.adj_close
       row.save
-    end    
-          
-    vehicle_price = VehiclePrice.where(:vehicle_id => v.id).extend(DescriptiveStatistics)
-    v.no_of_prices = vehicle_price.number(&:return)
-    if v.no_of_prices > 0
-      v.return = vehicle_price.mean(&:return) * 260 
-      v.risk = vehicle_price.standard_deviation(&:return) * Math.sqrt(260) 
-      if v.risk > 0
-        v.sharpe_ratio = (v.return - 0.02)/v.risk
-      end 
-      v.save    
-    end
+    end   
+    puts return_sum
+    puts ' The Return'
+    puts Math.exp(return_sum) - 1
+    puts 'The bench mark -0.1'
+    puts Math.exp(-0.1) - 1 
+    puts 'The bench mark 0'
+    puts Math.exp(0.0) - 1 
+    puts 'The bench mark 0.1'
+    puts Math.exp(0.1) - 1 
+        
+    vehicle_price = @v.vehicle_prices.where("return is NOT NULL").extend(DescriptiveStatistics)
+    @v.no_of_prices = vehicle_price.number(&:return)
+    #first_close = @v.vehicle_prices.where("return is NOT NULL").order("trade_date ASC").first.adj_close
+    #last_close = @v.vehicle_prices.where("return is NOT NULL").order("trade_date DESC").last.adj_close
+        
+    if @v.no_of_prices > 20
+      #@first_vp = @v.vehicle_prices.where("return is NOT NULL").order("trade_date ASC").first
+      #@last_vp = @v.vehicle_prices.where("return is NOT NULL").order("trade_date DESC").last
+      #@v.return = (@last_vp.adj_close - @first_vp.adj_close) / @first_vp.adj_close
+      # @v.return = vehicle_price.mean(&:return) * vehicle_price.number(&:return)
+      @v.return = Math.exp(return_sum) - 1
+      @v.risk = vehicle_price.standard_deviation(&:return) * Math.sqrt(250) 
+      @v.alpha = 0
+      @v.beta = 1.0
+      @v.sharpe_ratio = (@v.return - 0.02)/@v.risk
+    else
+      @v.return = nil
+      @v.risk = nil
+      @v.alpha = nil 
+      @v.beta = nil 
+      @v.sharpe_ratio = nil 
+     end
+      @v.save     
+   
   end  
   
   def self.get_history
-    veh = Vehicle.all
-    
+    get_ticker_history('^GSPC')
+    veh = Vehicle.where(" ticker <> '^GSPC' ")
+    # veh = Vehicle.where(" id > 1732 ")
     veh.each do |row|
       get_ticker_history(row.ticker)
+      calc_stats(row.ticker)
     end      
-  end  
-  
+  end   
   
 end

@@ -2,7 +2,13 @@ class VehiclesController < ApplicationController
   before_action :set_vehicle, only: [:show, :edit, :update, :destroy]
 
   def chart
-      @vehicle = Vehicle.where(" return is not null").order("sharpe_ratio DESC").paginate(:page => params[:page])
+    
+    if params[:search]
+      @vehicles = Vehicle.search(params[:search]).order("sharpe_ratio DESC").paginate(:page => params[:page])
+    else
+      @vehicles = Vehicle.all.order("sharpe_ratio DESC").paginate(:page => params[:page])
+    end
+      #@vehicle = Vehicle.where(" return is not null").order("sharpe_ratio DESC").paginate(:page => params[:page])
   end
   
   def search
@@ -22,7 +28,11 @@ class VehiclesController < ApplicationController
   # GET /vehicles
   # GET /vehicles.json
   def index
-    @vehicles = Vehicle.all
+    if params[:vehicle]
+      @vehicles = Vehicle.find_by_ticker(params[:vehicle])
+    else
+      @vehicles = Vehicle.all
+    end
   end
 
   # GET /vehicles/1

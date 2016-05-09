@@ -12,9 +12,9 @@ csv = CSV.parse(csv_text, :headers => true)
 csv.each do |row|
   v = Vehicle.new
   v.ticker = row['Symbol']
-  v.name = row['name']
+  v.name = row['Name']
+  v.parent_id = 395
   v.save
   puts "#{v.ticker}, #{v.name} saved"
 end
 
-puts "There are now #{Transaction.count} rows in the transactions table"
