@@ -1,14 +1,15 @@
 class VehiclesController < ApplicationController
+  helper_method :sort_column, :sort_direction
+  
   before_action :set_vehicle, only: [:show, :edit, :update, :destroy]
 
   def chart
     
     if params[:search]
-      @vehicles = Vehicle.search(params[:search]).order("sharpe_ratio DESC").paginate(:page => params[:page])
+      @vehicles = Vehicle.where("parent_id is NOT NULL").search(params[:search]).order(sort_column + " " + sort_direction).paginate(:page => params[:page])
     else
-      @vehicles = Vehicle.all.order("sharpe_ratio DESC").paginate(:page => params[:page])
+      @vehicles = Vehicle.where("return is not null and parent_id is NOT NULL ").order(sort_column + " " + sort_direction).paginate(:page => params[:page])
     end
-      #@vehicle = Vehicle.where(" return is not null").order("sharpe_ratio DESC").paginate(:page => params[:page])
   end
   
   def search
@@ -110,4 +111,13 @@ class VehiclesController < ApplicationController
         redirect_to root_path
       end
     end
+    
+    def sort_column
+      Vehicle.column_names.include?(params[:sort]) ? params[:sort] : "name"
+    end
+    
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    end
+    
 end

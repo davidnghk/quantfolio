@@ -68,36 +68,16 @@ def self.calc_stats(ticker_symbol)
     @v.vehicle_prices.sort_by { |m| m[:trade_date] }.each do |row|
       if prev_adj_close > 0 
          row.return = (row.adj_close - prev_adj_close) / prev_adj_close
-         puts row.return
-         puts row.adj_close
-         puts prev_adj_close
          return_sum = return_sum + Math.log(1+row.return)
-         puts row.return 
-         puts return_sum 
       end
       prev_adj_close = row.adj_close
       row.save
     end   
-    puts return_sum
-    puts ' The Return'
-    puts Math.exp(return_sum) - 1
-    puts 'The bench mark -0.1'
-    puts Math.exp(-0.1) - 1 
-    puts 'The bench mark 0'
-    puts Math.exp(0.0) - 1 
-    puts 'The bench mark 0.1'
-    puts Math.exp(0.1) - 1 
         
     vehicle_price = @v.vehicle_prices.where("return is NOT NULL").extend(DescriptiveStatistics)
     @v.no_of_prices = vehicle_price.number(&:return)
-    #first_close = @v.vehicle_prices.where("return is NOT NULL").order("trade_date ASC").first.adj_close
-    #last_close = @v.vehicle_prices.where("return is NOT NULL").order("trade_date DESC").last.adj_close
         
     if @v.no_of_prices > 20
-      #@first_vp = @v.vehicle_prices.where("return is NOT NULL").order("trade_date ASC").first
-      #@last_vp = @v.vehicle_prices.where("return is NOT NULL").order("trade_date DESC").last
-      #@v.return = (@last_vp.adj_close - @first_vp.adj_close) / @first_vp.adj_close
-      # @v.return = vehicle_price.mean(&:return) * vehicle_price.number(&:return)
       @v.return = Math.exp(return_sum) - 1
       @v.risk = vehicle_price.standard_deviation(&:return) * Math.sqrt(250) 
       @v.alpha = 0
@@ -114,14 +94,36 @@ def self.calc_stats(ticker_symbol)
    
   end  
   
+  def self.benchmark(ticker_symbol)  
+    require 'statsample'
+    
+    @a=Vehicle.find_by_ticker(ticker_symbol)
+    @b=Vehicle.where(" id = 395" )
+    
+    @x = @a.vehicle_prices.order(:trade_date)
+    @y = @b.vehicle_prices.order(:trade_date)
+    
+    ss_analysis("Statsample::Bivariate.correlation_matrix") do
+      ds=data_frame(@x, @y)
+      cm=cor(ds) 
+      summary(cm)
+    end
+   
+  end 
+  
   def self.get_history
     get_ticker_history('^GSPC')
-    veh = Vehicle.where(" ticker <> '^GSPC' ")
-    # veh = Vehicle.where(" id > 1732 ")
+    veh = Vehicle.where(" parent_id is NOT NULL ")
     veh.each do |row|
       get_ticker_history(row.ticker)
       calc_stats(row.ticker)
     end      
   end   
+  
+  def self.set_index
+    @v = Vehicle.where(id = 395)
+    @v.parent_id = nil
+    @v.save     
+  end  
   
 end
