@@ -17,11 +17,12 @@
   <thead>
     <tr>
       <th><%= sortable "ticker" %></th>
-      <th class="col-md-7"><%= sortable "name"   %></th>
+      <th class="col-md-6"><%= sortable "name"   %></th>
       <th><%= sortable "last_price", "Price" %> </th>
       <th><%= sortable "return" %></th>
       <th><%= sortable "risk"   %></th>
       <th><%= sortable "sharpe_ratio", "Sharpe" %></th>
+      <th><%= sortable "alpha", "Alpha" %></th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -35,6 +36,7 @@
         <td style="text-align: right"><%= number_to_percentage(vehicle.return*100, precision: 1) %></td>
         <td style="text-align: right"><%= number_to_percentage(vehicle.risk*100, precision: 1) %></td>
         <td style="text-align: right"><%= number_with_precision(vehicle.sharpe_ratio, precision: 3) %></td>
+        <td style="text-align: right"><%= number_to_percentage(vehicle.alpha*100, precision: 1) %></td>
       </tr>
     <% end %>
   </tbody>

@@ -1,6 +1,6 @@
 class Vehicle < ActiveRecord::Base
+  has_many :children, :class_name => "Vehicle", :foreign_key => :parent_id
   belongs_to :parent, :class_name => "Vehicle", :foreign_key => :parent_id
-  has_many :children, :class_name => "Vehicle"
   
   has_many :holdings
   has_many :vehicle_histories
@@ -82,6 +82,12 @@ def self.calc_stats(ticker_symbol)
       @v.risk = vehicle_price.standard_deviation(&:return) * Math.sqrt(250) 
       @v.alpha = 0
       @v.beta = 1.0
+      if @v.parent_id
+        @i = @v.parent
+        @v.alpha = @v.return - ( @v.risk * (@i.return-0.02)/@i.risk ) - 0.02
+      else
+        alpha = 0 
+      end 
       @v.sharpe_ratio = (@v.return - 0.02)/@v.risk
     else
       @v.return = nil
